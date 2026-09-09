@@ -32,12 +32,12 @@ export const ADDRESS = {
 };
 
 export const PHONE_NUMBERS: PhoneNumber[] = [
-  { local: '8888453534', international: '918888453534', label: 'Primary' },
+  { local: '8888453354', international: '918888453354', label: 'Primary' },
   { local: '7972453354', international: '917972453354', label: 'Alternate' },
 ];
 
 /** The number all WhatsApp deep links point at. */
-export const WHATSAPP_NUMBER = '918888453534';
+export const WHATSAPP_NUMBER = '918888453354';
 
 export const CUSTOMER_SERVICE = {
   availability: '24/7',

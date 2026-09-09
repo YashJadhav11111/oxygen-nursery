@@ -10,7 +10,7 @@ export default function Contact() {
   useSeo({
     title: 'Contact',
     description:
-      'Contact Oxygen Nursery, Chandshi, Nashik, Maharashtra. Call 8888453534 or 7972453354, message on WhatsApp, or book a consultation. 24/7 customer service.',
+      'Contact Oxygen Nursery, Chandshi, Nashik, Maharashtra. Call 8888453354 or 7972453354, message on WhatsApp, or book a consultation. 24/7 customer service.',
   });
 
   return (
