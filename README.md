@@ -1,7 +1,7 @@
 # 🌿 Oxygen Nursery — Website (Phase 1 Prototype)
 
 > **Green Begins With Us.**
-> Chandshi, Nashik, Maharashtra · 8888453534 / 7972453354 · 24/7 Customer Service
+> Chandshi, Nashik, Maharashtra · 8888453354 / 7972453354 · 24/7 Customer Service
 
 A complete, production-quality frontend for Oxygen Nursery. It runs entirely on your
 machine — no domain, hosting, database, payment gateway or backend required — but it is
@@ -393,7 +393,7 @@ screenshots with a wait longer than the 900 ms reveal.
 
 ## 8. How WhatsApp is configured
 
-**Number:** `src/config/businessConfig.ts → WHATSAPP_NUMBER` (currently `918888453534`).
+**Number:** `src/config/businessConfig.ts → WHATSAPP_NUMBER` (currently `918888453354`).
 Change that one line and every WhatsApp button on the site follows.
 
 **Messages:** `src/lib/whatsapp.ts` is the single utility. It builds a contextual message
@@ -705,3 +705,4 @@ Verified in a real browser (Chromium) across **360, 390, 768, 1024, 1440 and 192
 ---
 
 © Oxygen Nursery · *Green Begins With Us.*
+ 
