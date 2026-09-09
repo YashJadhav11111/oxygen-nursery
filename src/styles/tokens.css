@@ -1,0 +1,126 @@
+/* =========================================================================
+   OXYGEN NURSERY — DESIGN TOKENS
+   Colour language taken from foliage, bark, soil and morning light.
+   Deep evergreen carries authority; cream and clay keep it warm, not clinical.
+   ========================================================================= */
+:root {
+  /* --- Brand greens: sampled from the Oxygen Nursery logo ------------ */
+  --forest-900: #0B2A12;
+  --forest-800: #113418;
+  --forest-700: #17441E;
+  --forest-600: #1E5726;
+  --forest-500: #2A6E30;
+  --forest-400: #3E8C3A;
+  --forest-300: #6FB05F;
+  --forest-200: #A9CE96;
+  --forest-100: #D9E9CB;
+  --forest-050: #EEF5E7;
+
+  /* --- Leaf green: the bright foliage tone from the logo -------------- */
+  --leaf-600: #4C9520;
+  --leaf-500: #5FAC26;
+  --leaf-400: #7BC23F;
+  --leaf-100: #E4F2D3;
+
+  /* --- Bark brown: the trunk in the logo ------------------------------ */
+  --bark-700: #5C3A1E;
+  --bark-500: #7E5128;
+
+  /* --- Earth / clay accents ----------------------------------------- */
+  --clay-700: #7A4E2C;
+  --clay-600: #9A6538;
+  --clay-500: #B5804C;
+  --clay-300: #DDBE99;
+  --clay-100: #F2E5D5;
+
+  /* --- Neutrals: paper, linen, bark ---------------------------------- */
+  --cream-050: #FCFBF7;
+  --cream-100: #F6F3EB;
+  --cream-200: #EEEAE0;
+  --cream-300: #E0DBCD;
+  --ink-900: #16201A;
+  --ink-700: #2C3830;
+  --ink-500: #55605A;
+  --ink-400: #77817B;
+
+  /* --- Status ------------------------------------------------------- */
+  --status-available: #2E7D4F;
+  --status-available-bg: #E4F1E8;
+  --status-limited: #B07C10;
+  --status-limited-bg: #FBF0D6;
+  --status-out: #A63D3D;
+  --status-out-bg: #F8E3E3;
+
+  /* --- Semantic ------------------------------------------------------ */
+  --bg: var(--cream-050);
+  --bg-alt: var(--cream-100);
+  --bg-deep: var(--forest-900);
+  --surface: #FFFFFF;
+  --surface-sunken: var(--cream-100);
+  --text: var(--ink-900);
+  --text-muted: var(--ink-500);
+  --text-inverse: #F6F4EC;
+  --text-inverse-muted: rgba(246, 244, 236, 0.72);
+  --border: #E4E0D4;
+  --border-strong: #D2CCBB;
+  --primary: var(--forest-600);
+  --primary-hover: var(--forest-700);
+  --accent: var(--clay-500);
+  --accent-leaf: var(--leaf-500);
+  --whatsapp: #25D366;
+  --whatsapp-dark: #128C7E;
+
+  /* --- Type ---------------------------------------------------------- */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.86rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.03rem);
+  --step-1: clamp(1.1rem, 1.04rem + 0.3vw, 1.28rem);
+  --step-2: clamp(1.34rem, 1.2rem + 0.65vw, 1.75rem);
+  --step-3: clamp(1.62rem, 1.34rem + 1.2vw, 2.4rem);
+  --step-4: clamp(2rem, 1.5rem + 2.2vw, 3.25rem);
+  --step-5: clamp(2.4rem, 1.6rem + 3.6vw, 4.5rem);
+
+  /* --- Space --------------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --gutter: clamp(1.1rem, 0.6rem + 2.2vw, 2.5rem);
+  --maxw: 1280px;
+  --maxw-narrow: 780px;
+
+  /* --- Shape & depth -------------------------------------------------- */
+  --radius-sm: 9px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 30px;
+  --radius-2xl: 40px;
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(16, 38, 22, 0.05);
+  --shadow-sm: 0 2px 6px rgba(16, 38, 22, 0.05), 0 1px 2px rgba(16, 38, 22, 0.04);
+  --shadow-md: 0 14px 32px -16px rgba(13, 36, 20, 0.26), 0 3px 8px -3px rgba(13, 36, 20, 0.07);
+  --shadow-lg: 0 32px 70px -32px rgba(11, 32, 18, 0.38), 0 8px 20px -10px rgba(11, 32, 18, 0.14);
+  --shadow-xl: 0 48px 100px -44px rgba(11, 32, 18, 0.44), 0 12px 28px -14px rgba(11, 32, 18, 0.16);
+
+  --ease: cubic-bezier(0.22, 0.68, 0.32, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur: 260ms;
+  --dur-slow: 620ms;
+
+  --header-h: 74px;
+}
+
+@media (max-width: 860px) {
+  :root { --header-h: 64px; }
+}

@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+
+# Local configuration, including the admin seed credential. Never commit these.
+.env.local
+.env.*.local

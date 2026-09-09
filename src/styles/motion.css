@@ -1,0 +1,551 @@
+/* =========================================================================
+   OXYGEN NURSERY — MOTION SYSTEM
+   -------------------------------------------------------------------------
+   One vocabulary for every movement on the site, so nothing feels borrowed
+   from somewhere else. The reference is a garden in a light breeze: things
+   settle rather than snap, they lead with the tip and follow with the stem,
+   and most of the time they are perfectly still.
+
+   Stillness is the default. Motion is spent where it means something.
+   ========================================================================= */
+
+:root {
+  /* --- Easings ------------------------------------------------------- */
+  /* Settle: fast to start, long soft landing. The workhorse. */
+  --ease-leaf: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Glide: even, unhurried. For things that travel a distance. */
+  --ease-glide: cubic-bezier(0.32, 0.72, 0.28, 1);
+  /* Sway: symmetric, for anything that loops. */
+  --ease-sway: cubic-bezier(0.37, 0, 0.63, 1);
+  /* Press: a whisper of overshoot for tactile feedback only. */
+  --ease-press: cubic-bezier(0.3, 1.25, 0.6, 1);
+
+  /* --- Durations ----------------------------------------------------- */
+  --t-tap: 110ms;
+  --t-quick: 220ms;
+  --t-base: 400ms;
+  --t-reveal: 900ms;
+  --t-slow: 1400ms;
+
+  /* --- Distances ----------------------------------------------------- */
+  --rise: 26px;
+  --drift: 44px;
+}
+
+/* =========================================================================
+   SCROLL REVEALS
+   Variety with a shared accent — every entrance is a settle, they differ in
+   the direction the content settles from.
+   ========================================================================= */
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity var(--t-reveal) var(--ease-leaf),
+    transform var(--t-reveal) var(--ease-leaf),
+    clip-path var(--t-reveal) var(--ease-glide);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+/* will-change only while the reveal is still pending. Left on afterwards it
+   would promote every revealed element on the page to its own layer — a real
+   cost on a long page, for an animation that has already finished. */
+.reveal:not(.is-visible) { will-change: opacity, transform; }
+/* Once shown, an element is left completely plain: no transform, no clip. Only
+   the two variants that actually clip get a clip-path, and only while animating. */
+.reveal.is-visible { opacity: 1; transform: none; }
+.reveal--unfurl.is-visible,
+.reveal--sweep.is-visible { clip-path: inset(0 0 0 0); }
+
+/* Rise — the default. Content lifts into place. */
+.reveal--rise { transform: translate3d(0, var(--rise), 0); }
+
+/* Unfurl — grows open from its base, the way a new leaf opens. */
+.reveal--unfurl {
+  transform: translate3d(0, 12px, 0) scaleY(0.94);
+  transform-origin: 50% 100%;
+  clip-path: inset(0 0 22% 0);
+}
+
+/* Drift — arrives from the side, as if carried. */
+.reveal--drift-left { transform: translate3d(calc(var(--drift) * -1), 8px, 0); }
+.reveal--drift-right { transform: translate3d(var(--drift), 8px, 0); }
+
+/* Settle — eases down out of nothing. For headings above a composition. */
+.reveal--settle { transform: translate3d(0, -14px, 0) scale(0.99); }
+
+/* Bloom — opens outward from its own centre. For images and compositions. */
+.reveal--bloom { transform: scale(0.94); }
+
+/* Sweep — an image uncovering itself left to right. */
+.reveal--sweep { clip-path: inset(0 100% 0 0); transform: none; }
+
+/* Grow — a rule or underline extending. */
+.reveal--grow { transform: scaleX(0); transform-origin: 0 50%; opacity: 1; }
+.reveal--grow.is-visible { transform: scaleX(1); }
+
+/* A group whose children arrive in sequence rather than all at once. */
+.reveal-group > * { transition-delay: calc(var(--stagger, 70ms) * var(--i, 0)); }
+
+/* =========================================================================
+   SCROLL DEPTH
+   Large imagery settles as it rises into the viewport: slightly oversized and
+   square-cornered on approach, true size and softly rounded once it arrives.
+   ========================================================================= */
+.depth-media {
+  --depth-scale: 1.08;
+  --depth-progress: 0;
+  overflow: hidden;
+  border-radius: calc(var(--radius-lg) + (var(--radius-2xl) - var(--radius-lg)) * var(--depth-progress));
+  box-shadow: 0 calc(10px + 30px * var(--depth-progress)) calc(28px + 46px * var(--depth-progress))
+    calc(-14px - 18px * var(--depth-progress)) rgba(11, 32, 18, calc(0.16 + 0.16 * var(--depth-progress)));
+  transition: border-radius 220ms linear;
+}
+.depth-media > * { transform: scale(var(--depth-scale)); transform-origin: 50% 50%; }
+
+/* =========================================================================
+   LIVING PLANTS
+   A handful of hero-level illustrations breathe. Never all of them at once —
+   selective movement reads as life, constant movement reads as noise.
+   ========================================================================= */
+@keyframes leafSway {
+  0%, 100% { transform: rotate(-0.7deg) translate3d(0, 0, 0); }
+  50%      { transform: rotate(0.7deg) translate3d(0, -4px, 0); }
+}
+@keyframes slowDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%      { transform: translate3d(14px, -12px, 0) rotate(3deg); }
+}
+@keyframes sunShift {
+  0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0) scale(1); }
+  50%      { opacity: 0.8; transform: translate3d(-16px, 10px, 0) scale(1.06); }
+}
+
+/* The wrapper every illustration sits in, so it can carry its own motion
+   without disturbing the hover zoom on the card around it. */
+.media__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.media__art > svg { width: 100%; height: 100%; display: block; }
+
+/*
+ * A living plant.
+ *
+ * The breath is a translate, not a scale: translating a layer is composited,
+ * where scaling re-rasterises the whole illustration on every frame. The
+ * standing 1.04 scale is there purely to give the drift somewhere to go, so
+ * the plant never pulls away from the edge of its frame.
+ *
+ * Twelve seconds for a 7px rise. It should be the kind of movement you notice
+ * only if you stop and look for it.
+ */
+@keyframes plantBreath {
+  0%, 100% { transform: scale(1.04) translate3d(0, 0, 0); }
+  50%      { transform: scale(1.04) translate3d(0, -7px, 0); }
+}
+.media__art--alive { transform: scale(1.04); }
+.media__art--alive.is-onscreen {
+  animation: plantBreath 12s var(--ease-sway) infinite;
+  will-change: transform;
+}
+/* The hover zoom on a card wins over the breath while the pointer is on it. */
+.card--hover:hover .media__art--alive,
+.zoom-parent:hover .media__art--alive { animation-play-state: paused; }
+
+.is-alive { animation: leafSway 9s var(--ease-sway) infinite; transform-origin: 50% 100%; }
+
+/* =========================================================================
+   GROWTH — the recurring idea, used abstractly
+   A rule that extends, an underline that grows from where you touched it.
+   ========================================================================= */
+.grow-line {
+  position: relative;
+}
+.grow-line::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--t-base) var(--ease-leaf);
+}
+.grow-line:hover::after,
+.grow-line:focus-visible::after { transform: scaleX(1); }
+
+/* =========================================================================
+   SCROLL PROGRESS — a vine drawing itself along the top of the page
+   ========================================================================= */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2.5px;
+  z-index: 1200;
+  pointer-events: none;
+  background: transparent;
+}
+.scroll-progress__line {
+  height: 100%;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  background: linear-gradient(90deg, var(--forest-600), var(--leaf-500) 62%, var(--leaf-400));
+  box-shadow: 0 0 10px rgba(95, 172, 38, 0.5);
+}
+.scroll-progress__tip {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--progress, 0) * 100%);
+  width: 7px; height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--leaf-400);
+  box-shadow: 0 0 0 3px rgba(95, 172, 38, 0.22);
+  opacity: calc(var(--progress, 0) * 3);
+}
+
+/* =========================================================================
+   CURSOR — desktop only, a small green seed with a soft ring
+   ========================================================================= */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1300;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.cursor__dot,
+.cursor__ring {
+  position: absolute;
+  top: 0; left: 0;
+  border-radius: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+.cursor__dot {
+  width: 7px; height: 7px;
+  background: var(--forest-600);
+  transition: width var(--t-quick) var(--ease-leaf), height var(--t-quick) var(--ease-leaf),
+    opacity var(--t-quick) var(--ease-leaf);
+}
+.cursor__ring {
+  width: 30px; height: 30px;
+  border: 1.5px solid rgba(42, 110, 48, 0.42);
+  transition: width var(--t-base) var(--ease-leaf), height var(--t-base) var(--ease-leaf),
+    border-color var(--t-base) var(--ease-leaf), opacity var(--t-base) var(--ease-leaf);
+}
+.cursor.is-hot .cursor__ring { width: 46px; height: 46px; border-color: rgba(95, 172, 38, 0.6); }
+.cursor.is-hot .cursor__dot { width: 5px; height: 5px; }
+.cursor.is-down .cursor__ring { width: 24px; height: 24px; }
+.cursor.is-hidden { opacity: 0; }
+
+/* =========================================================================
+   ORGANIC SECTION EDGES
+   Sections meet along a soft rise rather than a ruled line.
+   ========================================================================= */
+.edge {
+  position: absolute;
+  left: 0; right: 0;
+  width: 100%;
+  height: clamp(34px, 5vw, 68px);
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+.edge--top { top: -1px; }
+.edge--bottom { bottom: -1px; }
+
+/* =========================================================================
+   REDUCED MOTION
+   Everything above is a courtesy. Asked to stop, we stop — content still
+   arrives, it simply arrives already in place.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .depth-media { --depth-scale: 1; --depth-progress: 1; }
+  .depth-media > * { transform: none; }
+  .is-alive { animation: none !important; }
+  .media__art--alive,
+  .media__art--alive.is-onscreen { animation: none !important; transform: none !important; }
+  .scroll-progress { display: none; }
+  .cursor { display: none; }
+  .grow-line::after { transition: none; }
+}
+
+/* Parallax layers are promoted by the hook only while they are moving, so no
+   blanket will-change here — it would keep every backdrop in memory. */
+.parallax > svg { width: 100%; height: 100%; display: block; }
+
+/* The edge must sit above the section's own backdrop but below its content. */
+.green-solutions .edge,
+.contact-band .edge,
+.why .edge { z-index: 2; }
+
+/* =========================================================================
+   MICRO-INTERACTIONS
+   The small responses that make an interface feel made rather than assembled.
+   ========================================================================= */
+
+/* --- Buttons: something with weight behind the glass -------------------- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--t-quick) var(--ease-leaf),
+    box-shadow var(--t-base) var(--ease-leaf),
+    background-color var(--t-base) var(--ease-leaf),
+    color var(--t-base) var(--ease-leaf),
+    border-color var(--t-base) var(--ease-leaf);
+}
+/* Light rising from the base on hover — a sunrise, not a shine sweep. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 100%;
+  background: radial-gradient(120% 90% at 50% 120%, rgba(255, 255, 255, 0.24), transparent 62%);
+  opacity: 0;
+  transform: translateY(28%);
+  transition: opacity var(--t-base) var(--ease-leaf), transform var(--t-base) var(--ease-leaf);
+  pointer-events: none;
+}
+.btn:hover:not(:disabled)::before { opacity: 1; transform: translateY(0); }
+.btn:active:not(:disabled) { transform: translateY(1px) scale(0.985); transition-duration: var(--t-tap); }
+.btn > * { position: relative; z-index: 1; }
+
+/* An arrow at the end of a button leans towards where it is going. */
+.btn svg:last-child { transition: transform var(--t-base) var(--ease-leaf); }
+.btn:hover:not(:disabled) svg:last-child { transform: translateX(3px); }
+
+/* --- Cards: a press response where there is no hover -------------------- */
+@media (hover: none) {
+  .card--hover:active,
+  .category-card:active,
+  .collection-card:active,
+  .care-card:active { transform: scale(0.985); transition: transform var(--t-tap) var(--ease-leaf); }
+}
+
+/* --- Icon buttons ------------------------------------------------------- */
+.nav__icon-btn svg,
+.service-card__wa svg,
+.fab__toggle svg { transition: transform var(--t-base) var(--ease-leaf); }
+.nav__icon-btn:hover svg,
+.service-card__wa:hover svg { transform: scale(1.12) rotate(-4deg); }
+
+/* --- Navigation: an indicator that travels ------------------------------ */
+.nav__links { position: relative; }
+.nav__indicator {
+  position: absolute;
+  bottom: 4px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: var(--leaf-500);
+  transform: translateX(var(--x, 0)) scaleX(var(--sx, 0));
+  width: 1px;
+  transform-origin: 0 50%;
+  transition: transform 520ms var(--ease-glide), opacity var(--t-base) var(--ease-leaf);
+  opacity: var(--o, 0);
+  pointer-events: none;
+}
+/* The per-link underline gives way to the travelling indicator. */
+.nav__links .nav__link.is-active::after { display: none; }
+
+/* --- Mobile menu: an unhurried, deliberate open ------------------------- */
+.mobile-menu { animation: menuIn 420ms var(--ease-glide); }
+@keyframes menuIn {
+  from { opacity: 0; transform: translate3d(0, -10px, 0); }
+}
+.mobile-menu__link {
+  animation: menuItemIn 520ms var(--ease-leaf) backwards;
+  animation-delay: calc(var(--i) * 48ms + 90ms);
+}
+@keyframes menuItemIn {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+}
+.mobile-menu__link { transition: color var(--t-base) var(--ease-leaf), padding-left var(--t-base) var(--ease-leaf); }
+.mobile-menu__link:active { padding-left: 0.75rem; }
+
+/* --- Search: the field opens up when focused ---------------------------- */
+.search__input {
+  transition: border-color var(--t-base) var(--ease-leaf), box-shadow var(--t-base) var(--ease-leaf),
+    background-color var(--t-base) var(--ease-leaf);
+}
+.search > svg { transition: color var(--t-base) var(--ease-leaf), transform var(--t-base) var(--ease-leaf); }
+.search:focus-within > svg { color: var(--forest-600); transform: scale(1.08); }
+.search__clear { transition: transform var(--t-quick) var(--ease-leaf), background-color var(--t-quick) var(--ease-leaf); }
+.search__clear:hover { transform: rotate(90deg); background: var(--cream-300); }
+
+/* --- Filters: selection settles in -------------------------------------- */
+.chip { transition: background-color var(--t-base) var(--ease-leaf), border-color var(--t-base) var(--ease-leaf),
+  color var(--t-base) var(--ease-leaf), transform var(--t-quick) var(--ease-leaf); }
+.chip:active { transform: scale(0.96); }
+.filters__box { transition: background-color var(--t-quick) var(--ease-leaf), border-color var(--t-quick) var(--ease-leaf),
+  color var(--t-quick) var(--ease-leaf), transform var(--t-quick) var(--ease-press); }
+.filters__check.is-checked .filters__box { transform: scale(1.06); }
+.filters__box svg { transition: transform var(--t-quick) var(--ease-press); transform: scale(0.4); }
+.filters__check.is-checked .filters__box svg { transform: scale(1); }
+.active-filters__chip { animation: chipIn 340ms var(--ease-leaf) backwards; }
+@keyframes chipIn { from { opacity: 0; transform: scale(0.88); } }
+
+/* --- The recommender: progress that grows ------------------------------- */
+.recommender__progress span {
+  transition: width 620ms var(--ease-glide);
+  border-radius: 0 3px 3px 0;
+  position: relative;
+}
+.recommender__progress span::after {
+  content: '';
+  position: absolute;
+  right: -3px; top: 50%;
+  width: 8px; height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--leaf-400);
+  box-shadow: 0 0 0 3px rgba(123, 194, 63, 0.28);
+}
+.recommender__option { transition: background-color var(--t-base) var(--ease-leaf), border-color var(--t-base) var(--ease-leaf),
+  color var(--t-base) var(--ease-leaf), transform var(--t-quick) var(--ease-leaf), box-shadow var(--t-base) var(--ease-leaf); }
+.recommender__option:active { transform: scale(0.96); }
+.recommender__option svg { transition: transform var(--t-base) var(--ease-leaf); }
+.recommender__option:hover svg { transform: translateY(-2px) scale(1.08); }
+.recommender__step, .recommender__results { animation: panelIn 520ms var(--ease-leaf); }
+@keyframes panelIn { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
+
+/* --- Forms: focus and validation ---------------------------------------- */
+.input, .select, .textarea {
+  transition: border-color var(--t-base) var(--ease-leaf), box-shadow var(--t-base) var(--ease-leaf),
+    background-color var(--t-base) var(--ease-leaf);
+}
+.field__error { animation: errorIn 320ms var(--ease-leaf); }
+@keyframes errorIn { from { opacity: 0; transform: translate3d(0, -4px, 0); } }
+.success__icon { animation: popIn 520ms var(--ease-press); }
+
+/* --- Gallery ------------------------------------------------------------- */
+.gallery__thumb { transition: border-color var(--t-base) var(--ease-leaf), opacity var(--t-base) var(--ease-leaf),
+  transform var(--t-quick) var(--ease-leaf); }
+.gallery__thumb:active { transform: scale(0.94); }
+.gallery__nav, .gallery__expand { transition: transform var(--t-quick) var(--ease-leaf), background-color var(--t-base) var(--ease-leaf), opacity var(--t-base) var(--ease-leaf); }
+.gallery__nav:hover:not(:disabled), .gallery__expand:hover { transform: translateY(-50%) scale(1.08); }
+.gallery__expand:hover { transform: scale(1.08); }
+
+/* --- Service cards: each one hints at its own work ---------------------- */
+.service-card__icon svg,
+.service-chip__icon svg { transition: transform 620ms var(--ease-leaf); }
+
+/* The general case: a small lift. */
+.service-card:hover .service-card__icon svg { transform: translateY(-2px) scale(1.06); }
+
+/* Then the specific ones, each borrowed from the work itself. */
+/* Irrigation — the drop falls */
+.service-card:hover .service-card__icon[data-motion='droplet'] svg { transform: translateY(4px) scale(1.08); }
+/* Maintenance — the blades close */
+.service-card:hover .service-card__icon[data-motion='scissors'] svg { transform: rotate(-16deg); }
+/* Vertical garden — the cells turn into place */
+.service-card:hover .service-card__icon[data-motion='grid'] svg { transform: rotate(90deg) scale(1.04); }
+/* Plantation and restoration — growth upward */
+.service-card:hover .service-card__icon[data-motion='forest'] svg,
+.service-card:hover .service-card__icon[data-motion='seedling'] svg,
+.service-card:hover .service-card__icon[data-motion='sprout'] svg { transform: translateY(-4px) scale(1.12); }
+/* Landscape design — the needle finds its bearing */
+.service-card:hover .service-card__icon[data-motion='compass'] svg { transform: rotate(30deg); }
+/* Lawn — the sward leans in the breeze */
+.service-card:hover .service-card__icon[data-motion='lawn'] svg { transform: skewX(-8deg); }
+/* Green belt — settles wider */
+.service-card:hover .service-card__icon[data-motion='factory'] svg { transform: scaleX(1.1); }
+/* Cultural forest — a slow turn */
+.service-card:hover .service-card__icon[data-motion='star'] svg { transform: rotate(72deg); }
+/* Terrace — steps up */
+.service-card:hover .service-card__icon[data-motion='building'] svg { transform: translateY(-3px); }
+/* Butterfly garden — a wingbeat */
+.service-card:hover .service-card__icon[data-motion='butterfly'] svg { transform: scaleX(0.86) translateY(-2px); }
+
+/* --- Growth: headings underlined by a rule that extends ----------------- */
+.section-head .eyebrow::before { transition: width 620ms var(--ease-glide); }
+.reveal.is-visible .eyebrow::before { width: 26px; }
+.reveal .eyebrow::before { width: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::before, .btn svg:last-child,
+  .mobile-menu, .mobile-menu__link,
+  .recommender__step, .recommender__results,
+  .field__error, .success__icon,
+  .active-filters__chip { animation: none !important; transition: none !important; }
+  .nav__indicator { transition: none; }
+  .reveal .eyebrow::before { width: 26px; }
+}
+
+/* Depth wrappers inherit the sizing of the media they replaced. */
+.service-detail__image.depth-media,
+.guide-hero.depth-media,
+.value__media-main.depth-media,
+.intro__art-main.depth-media { width: 100%; }
+.intro__art-main.depth-media { aspect-ratio: 4 / 5; }
+.intro__art-main.depth-media > * { width: 100%; height: 100%; }
+
+/* =========================================================================
+   IRRIGATION — the line actually runs
+   The irrigation service card is the one place a scene animates its own
+   content. Engaging with the card makes the drip line run: drops fall from
+   each emitter, staggered, then re-form. Resting and final states match the
+   static illustration exactly, so nothing jumps when it starts or stops.
+   ========================================================================= */
+@keyframes dripFall {
+  0%   { transform: translateY(0); opacity: 0.85; }
+  50%  { transform: translateY(13px); opacity: 0; }
+  51%  { transform: translateY(-9px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0.85; }
+}
+@keyframes dripStream {
+  0%, 100% { opacity: 0.9; }
+  50%      { opacity: 0.45; }
+}
+.service-card:hover .scene-drop,
+.service-card:focus-within .scene-drop {
+  animation: dripFall 1.9s var(--ease-glide) infinite;
+  animation-delay: var(--drip, 0s);
+}
+.service-card:hover .scene-stream,
+.service-card:focus-within .scene-stream {
+  animation: dripStream 1.9s var(--ease-sway) infinite;
+  animation-delay: var(--drip, 0s);
+}
+
+/* =========================================================================
+   GROWTH — links underlined by a rule that extends from where you enter
+   ========================================================================= */
+.footer__col a,
+.crumbs a,
+.mobile-menu__phone { position: relative; }
+.footer__col a::after,
+.crumbs a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--t-base) var(--ease-leaf);
+}
+.footer__col a:hover::after,
+.footer__col a:focus-visible::after,
+.crumbs a:hover::after,
+.crumbs a:focus-visible::after { transform: scaleX(1); }
+/* The browser's own underline would fight the growing rule. */
+.crumbs a:hover { text-decoration: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card:hover .scene-drop,
+  .service-card:hover .scene-stream,
+  .service-card:focus-within .scene-drop,
+  .service-card:focus-within .scene-stream { animation: none !important; }
+  .footer__col a::after, .crumbs a::after { transition: none; }
+}

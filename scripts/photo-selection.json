@@ -1,0 +1,128 @@
+{
+  "_comment": "Which supplied photograph becomes the primary image, and in what order the gallery follows. Index numbers refer to the alphabetical order of files inside each source folder. 'skip' records images deliberately left out, with the reason.",
+  "plants": {
+    "aloe-vera": {
+      "folder": "Aloe Vera",
+      "order": [3, 2, 1],
+      "alt": [
+        "Aloe vera in a glazed green pot, showing its thick toothed leaves",
+        "Aloe vera growing in a terracotta pot",
+        "Mature aloe vera rosette planted out in a garden bed"
+      ]
+    },
+    "alphonso-mango": {
+      "folder": "Alphonso Mango",
+      "order": [1, 3, 2],
+      "alt": [
+        "Young grafted Alphonso mango plant in a nursery pot",
+        "Alphonso mango sapling in a white ceramic pot",
+        "Close-up of new Alphonso mango leaves flushing red-bronze"
+      ]
+    },
+    "areca-palm": {
+      "folder": "Areca Palm",
+      "order": [3, 2, 1],
+      "extraPrimary": "areca-palm-supplied.jpg",
+      "extraPrimaryAlt": "Areca palm in a nursery pot, its feathery fronds arching outward",
+      "alt": [
+        "Areca palm in a white pot against a warm plastered wall",
+        "Areca palm in a black nursery pot",
+        "Areca palms growing in a nursery greenhouse"
+      ]
+    },
+    "bougainvillea": {
+      "folder": "Bougainvillea",
+      "order": [1, 3, 2],
+      "alt": [
+        "Bougainvillea trained as a standard, covered in magenta bracts",
+        "Bougainvillea climbing around a doorway",
+        "Bougainvillea in a large pot, flowering deep crimson"
+      ]
+    },
+    "duranta-golden": {
+      "folder": "Duranta Golden",
+      "order": [3, 2],
+      "skip": { "1": "visible stock-site watermark across the lower edge" },
+      "alt": [
+        "Golden duranta clipped into a rounded shrub",
+        "Golden duranta planted as a low hedge along a path"
+      ]
+    },
+    "echeveria": {
+      "folder": "Echeveria",
+      "order": [1, 3, 4, 2],
+      "alt": [
+        "Echeveria rosette in a terracotta pot, leaves edged in pink",
+        "Potted echeverias and other succulents arranged on a bench",
+        "A tiered display of echeverias and mixed succulents",
+        "Small succulents including echeverias on a windowsill"
+      ]
+    },
+    "ficus-panda": {
+      "folder": "Ficus Panda",
+      "order": [1, 2, 3],
+      "alt": [
+        "Ficus panda grown as a ball topiary in a white pot",
+        "Ficus panda trained into tiered layers",
+        "Ficus panda styled as a bonsai in a shallow tray"
+      ]
+    },
+    "guava": {
+      "folder": "Guava",
+      "order": [3, 1, 2],
+      "alt": [
+        "Potted guava tree carrying ripening fruit",
+        "Guava foliage with young fruit forming",
+        "Young guava plants growing in the ground"
+      ]
+    },
+    "gulmohar": {
+      "folder": "Gulmohar",
+      "order": [4, 2, 1, 3],
+      "alt": [
+        "Mature gulmohar tree in full scarlet flower over a lawn",
+        "Close-up of gulmohar flowers and buds",
+        "Gulmohar canopy in flower against a blue sky",
+        "Gulmohar tree flowering beside a path"
+      ]
+    },
+    "mogra": {
+      "folder": "Mogra",
+      "order": [2, 3, 1],
+      "alt": [
+        "Mogra bush in a terracotta pot, covered in double white flowers",
+        "Potted mogra plant in flower",
+        "Mogra flowering in a large clay pot"
+      ]
+    },
+    "monstera-deliciosa": {
+      "folder": "Monstera Deliciosa",
+      "order": [3, 2, 4, 1],
+      "alt": [
+        "Monstera deliciosa in a black pot, large leaves deeply split",
+        "Monstera deliciosa against a dark wall",
+        "Tall monstera deliciosa beside a sunlit window",
+        "Monstera deliciosa in a white pot in a bright room"
+      ]
+    },
+    "neem": {
+      "folder": "Neem",
+      "order": [2, 1, 3],
+      "skip": { "4": "photograph is of ferns, not neem" },
+      "alt": [
+        "Neem branch in flower, with its fine serrated leaflets",
+        "Close-up of neem foliage",
+        "Neem tree in flower against the sky"
+      ]
+    },
+    "snake-plant": {
+      "folder": "Snake Plant",
+      "order": [1, 2, 3],
+      "alt": [
+        "Snake plant in a pale ceramic pot on a sunlit balcony",
+        "Snake plant in a tall white pot",
+        "Snake plant in a woven-texture pot on a wooden floor"
+      ]
+    }
+  }
+}
