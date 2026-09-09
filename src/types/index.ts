@@ -22,6 +22,22 @@ export type SceneVariant =
   | 'sprout' | 'soil' | 'watering' | 'sunlight' | 'pruning' | 'pests'
   | 'bare-ground' | 'bare-wall';
 
+/** Generated botanical illustration variants supported by BotanicalArt. */
+export type ArtVariant =
+  | 'foliage'
+  | 'palm'
+  | 'succulent'
+  | 'flowering'
+  | 'fruit'
+  | 'tree'
+  | 'shrub'
+  | 'landscape'
+  | 'terrace'
+  | 'vertical'
+  | 'lawn'
+  | 'forest'
+  | 'sprout';
+
 export interface PlantImage {
   /**
    * Real photo URL or imported asset. When present it is used and the
